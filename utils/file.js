@@ -5,7 +5,7 @@ const crypto = require('crypto');
 
 const path = require('path');
 
-const PORT = 3000;
+const PORT = 3001;
 const HOST = process.env.HOST || 'localhost';
 
 module.exports.initExpressServer = function initExpressServer() {

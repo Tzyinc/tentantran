@@ -11,7 +11,6 @@ const translate = require('./utils/translate');
 const sillyfier = require('./utils/sillyfier');
 const languages = require('./utils/languages');
 const replies = require('./utils/replies');
-const timebombSetup = require('./utils/timebomb');
 
 initExpressServer();
 
@@ -19,7 +18,7 @@ const tempBotToken = process.env.BOT_TOKEN;
 
 console.log('telegram bot started');
 
-let toggle = 1;
+let toggle = 0;
 
 let bot;
 let telegram;
@@ -31,14 +30,11 @@ if (tempBotToken) {
   telegram = new Telegram(process.env.BOT_TOKEN, []);
 }
 
-const delayTimebomb = timebombSetup(telegram);
-
 bot.start(ctx => ctx.reply(
   'Hi! Ever felt translations were too good nowadays? Use me instead! Send me some images or text to translate!',
 ));
 bot.help(ctx => ctx.reply('Send me some image or text to translate!'));
 bot.on('message', (ctx) => {
-  delayTimebomb(ctx.chat);
 
   if (Math.random() < toggle * 0.15) {
     ctx.reply(_.sample(replies.lazy));
@@ -60,17 +56,6 @@ bot.on('message', (ctx) => {
       .then(values => getExpressFileLink(values[values.length - 1]))
       .then(publicUrl => ocr(publicUrl));
   } else if (ctx.message.text) {
-    if (ctx.message.text === '/supersilly') {
-      toggle = 1;
-      ctx.reply('Super Silly Mode ACTIVATED');
-      return;
-    }
-    if (ctx.message.text === '/goodboi') {
-      toggle = 0;
-      ctx.reply('I will be a good boi now');
-      return;
-    }
-
     promise = promise.then(() => ctx.message.text);
   }
 
