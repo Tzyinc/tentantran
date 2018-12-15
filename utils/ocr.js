@@ -6,7 +6,7 @@ function debug(imageUri, res) {
     console.log(imageUri);
     console.log(res);
     for (const response of res.responses) {
-      console.log(response.fullTextAnnotation.text);
+      console.log(response);
     }
     console.log();
   } catch (e) {
